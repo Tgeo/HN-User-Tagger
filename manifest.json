@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+
+  "name": "HN User Tagger",
+  "description": "This extension allows you to tag users on Hacker News",
+  "version": "0.1",
+
+  "permissions": [
+    "https://news.ycombinator.com/*",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://news.ycombinator.com/*"],
+      "js": ["bower_components/jquery/dist/jquery.min.js", "main.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
