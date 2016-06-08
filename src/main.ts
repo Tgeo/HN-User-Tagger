@@ -3,11 +3,7 @@
 
 (() => {
 
-    enum TagUserText {
-        AddTag,
-        ViewTag,
-        TagSaved
-    }
+    "use strict";
     
     const addTag = "◁ add tag";
     const viewTag = "◀ view tag";
@@ -16,26 +12,24 @@
     
     class UserTagger {
         
-        initialize() {
-            
-            chrome.storage.local.get("tags", function (tagsObject) {
+        public initialize() {
+            chrome.storage.local.get("tags", (tagsObject) => {
                 // Get the existing tags.
                 let allTags = tagsObject["tags"];
                 console.log("Tags from storage", JSON.stringify(allTags));
 
                 let userElements = $("td.default div span.comhead");
-                userElements.each(function (_, elem) {
-
+                userElements.each((_, elem) => {
                     let userElem = $(elem);
                     let userLink = userElem.children("a:first");
                     let userid = userLink.text();
 
-                    let linkText = "◁ add tag";
+                    let linkText = addTag;
                     if (allTags && userid && allTags[userid])
-                        linkText = "◀ view tag";
+                        linkText = viewTag;
 
                     let tagUserLink = $('<a href="#" class="tagUserLink" style="margin-left:3px">' + linkText + '</a>');
-                    tagUserLink.on("click", { userid: userid, element: elem }, function (event) {
+                    tagUserLink.on("click", { userid: userid, element: elem }, (event) => {
                         this.toggleUserTagForm(event);
                         return false; // Prevent the page from resetting to scrollTop = 0. (href="#").
                     });
@@ -44,21 +38,19 @@
             });
         }
         
-        toggleUserTagForm(event: JQueryEventObject) {
-
+        private toggleUserTagForm(event: JQueryEventObject) {
             let userid = $('#userid').val();
             if (userid && userid == event.data.userid) {
                 // Nothing to do -- they clicked the link while the form was open. Close it.
                 this.removeTagForm();
-                this.tryUpdateTagUserLinkText('◁ close tag');
+                this.tryUpdateTagUserLinkText(closeTag);
                 return;
             }
 
             // Remove any existing tag forms. Multiple forms would cause issues.
             this.removeTagForm();
 
-            chrome.storage.local.get("tags", function (tagsObject) {
-
+            chrome.storage.local.get("tags", (tagsObject) => {
                 let allTags = tagsObject["tags"];
                 let existingTag = "";
                 if (allTags && allTags[event.data.userid])
@@ -70,17 +62,16 @@
                     '"></input><textarea id="tag" rows="5">' +
                     existingTag +
                     '</textarea><br /><input type="submit" value="OK"></input></form>');
-                tagForm.submit(this.addTagToUser); // Add the submit handler.
+                tagForm.submit((event) => this.addTagToUser(event)); // Add the submit handler.
 
                 // Add the form under the user element.
                 let userElem = $(event.data.element);
                 userElem.append(tagForm);
-                this.tryUpdateTagUserLinkText('◁ close tag');
+                this.tryUpdateTagUserLinkText(closeTag);
             });
         }
 
-        addTagToUser(event: JQueryEventObject) {
-
+        private addTagToUser(event: JQueryEventObject) {
             event.preventDefault();
             // Get the values from the form.    
             let tag = $('#tag').val();
@@ -88,8 +79,7 @@
             if (!userid)
                 return;
 
-            chrome.storage.local.get("tags", function (tagsObject) {
-
+            chrome.storage.local.get("tags", (tagsObject) => {
                 // Get the existing tags.
                 let allTags = tagsObject["tags"];
                 if (!allTags)
@@ -99,26 +89,24 @@
                 allTags[userid] = tag;
 
                 // Save all tags.
-                chrome.storage.local.set({ tags: allTags }, function () {
-
+                chrome.storage.local.set({ tags: allTags }, () => {
                     if (chrome.runtime.lastError) {
                         console.log(chrome.runtime.lastError);
                         alert("Tag save unsuccessful: " + chrome.runtime.lastError);
                     } else {
                         console.log("Tag save was successful");
-                        this.tryUpdateTagUserLinkText('✅ tag saved!');
+                        this.tryUpdateTagUserLinkText(tagSaved);
                         this.removeTagForm();
                     }
                 });
             });
         }
 
-        removeTagForm() {
+        private removeTagForm() {
             $('#tagForm').remove();
         }
 
-        tryUpdateTagUserLinkText(newText: string) {
-
+        private tryUpdateTagUserLinkText(newText: string) {
             let tagForm = $('#tagForm');
             if (!tagForm)
                 return;
@@ -128,7 +116,6 @@
                 tagUserLink.text(newText);
             }
         }
-        
     }
 
     // Initialize the page.
