@@ -1,5 +1,5 @@
-.vscode
-bower_components
+node_modules
 typings
 *.map
 main.js
+chrome/dist

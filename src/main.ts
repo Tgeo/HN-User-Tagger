@@ -1,8 +1,7 @@
-(() => {
+/// <reference path="../typings/jquery/jquery.d.ts" />
+/// <reference path="../typings/chrome/chrome.d.ts" />
 
-    // Initialize the page.
-    var tagger = new UserTagger();
-    tagger.initialize();
+(() => {
 
     enum TagUserText {
         AddTag,
@@ -132,4 +131,8 @@
         
     }
 
+    // Initialize the page.
+    var tagger = new UserTagger();
+    tagger.initialize();
+    
 })();
