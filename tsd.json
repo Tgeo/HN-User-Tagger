@@ -19,6 +19,18 @@
     },
     "chrome/chrome.d.ts": {
       "commit": "26a1f8c44f5fe76168df717020bfb93839b63db3"
+    },
+    "orchestrator/orchestrator.d.ts": {
+      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+    },
+    "gulp/gulp.d.ts": {
+      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+    },
+    "node/node.d.ts": {
+      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
+    },
+    "q/Q.d.ts": {
+      "commit": "f481e77dfca5a146db1b4f5f20f15929b30c8729"
     }
   }
 }

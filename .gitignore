@@ -3,3 +3,5 @@ typings
 *.map
 main.js
 chrome/dist
+firefox/dist
+firefox/*.js

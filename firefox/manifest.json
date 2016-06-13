@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "HN User Tagger",
+  "version": "0.1", 
+  "description": "This extension allows you to tag users on Hacker News",
+  "icons": {
+    "48": "icons/hn-tagger.png"
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "hn-user-tagger@tgeonetta.com",
+      "strict_min_version": "45.0"
+    }
+  },
+
+  "permissions": [
+    "storage"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://news.ycombinator.com/*"],
+      "js": ["dist/jquery.min.js", "main.js"]
+    }
+  ]
+}
